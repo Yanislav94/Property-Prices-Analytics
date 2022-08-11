@@ -1,6 +1,5 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.*;
@@ -15,7 +14,13 @@ public class Main {
 
         Document doc = Jsoup.connect(url).get();
         Elements desktopOnly = doc.getElementsByClass("style4");
-        System.out.println(desktopOnly);
+
+        Elements tableRow =  doc.getElementsByTag("tr");
+        for (int i = 3; i < tableRow.size(); i++) {
+            String tabled = tableRow.get(7).text();
+            System.out.println(tabled);
+        }
+
 
     }
 
