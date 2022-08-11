@@ -1,5 +1,6 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.*;
@@ -16,9 +17,12 @@ public class Main {
         Elements desktopOnly = doc.getElementsByClass("style4");
 
         Elements tableRow =  doc.getElementsByTag("tr");
+
+
         for (int i = 3; i < tableRow.size(); i++) {
-            String tabled = tableRow.get(7).text();
-            System.out.println(tabled);
+            Element tr = tableRow.get(i);
+            Elements td =  tr.getElementsByTag("td");
+            System.out.printf("Квартал - %s%nСредна Цена - %s%n", td.get(0).text(), td.get(7).text());
         }
 
 
