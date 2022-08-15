@@ -17,6 +17,7 @@ public class Main {
         Elements desktopOnly = doc.getElementsByClass("style4");
 
         Elements tableRow =  doc.getElementsByTag("tr");
+		int a = 5;
 
 
         for (int i = 3; i < tableRow.size(); i++) {
