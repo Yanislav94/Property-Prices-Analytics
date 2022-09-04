@@ -6,25 +6,42 @@ import org.jsoup.select.Elements;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        //URL url = new URL("https://www.mirela.bg/index.php?p=stats_list&price_type=1&type=1&etype=543&city_id=3&week=2022-08-08&month=2022-07-01");
-        String url = "https://www.mirela.bg/index.php?p=stats_list&price_type=1&type=1&etype=543&city_id=3&week=2022-08-08&month=2022-07-01";
+        Scanner scanner = new Scanner(System.in);
+
+        LocalDate today = LocalDate.parse("2006-01-02");
+        LocalDate nextWeek = today.plus(1, ChronoUnit.WEEKS);
+
+        String url = "https://www.mirela.bg/index.php?p=stats_list&price_type=1&type=1&etype=543&city_id=3&week=" + nextWeek + "&month=2022-07-01";
 
         Document doc = Jsoup.connect(url).get();
-        Elements desktopOnly = doc.getElementsByClass("style4");
+        Elements getHtmlTables =  doc.getElementsByTag("tr");
+        Map<String, String> map = new HashMap<>();
+        List<PricePerDistrict> list = new ArrayList<>();
 
-        Elements tableRow =  doc.getElementsByTag("tr");
 
-
-        for (int i = 3; i < tableRow.size(); i++) {
-            Element tr = tableRow.get(i);
+        for (int i = 3; i < getHtmlTables.size(); i++) {
+            getHtmlTables =  doc.getElementsByTag("tr");
+            Element tr = getHtmlTables.get(i);
             Elements td =  tr.getElementsByTag("td");
-            System.out.printf("Квартал - %s%nСредна Цена - %s%n", td.get(0).text(), td.get(7).text());
+
+            String[] sumarr = td.get(7).text().split(" ");
+            String sum = sumarr[1] + sumarr[2];
+            int price = Integer.parseInt(sum);
+            PricePerDistrict pricePerDistrict = new PricePerDistrict(price, td.get(0).text());
+            list.add(pricePerDistrict);
+
         }
 
+        for (PricePerDistrict perDistrict : list) {
+            System.out.println(perDistrict.toString());
+        }
 
     }
 
